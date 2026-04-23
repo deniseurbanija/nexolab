@@ -19,13 +19,22 @@ public class AuthService {
      * @return el Usuario si las credenciales son válidas, null en caso contrario.
      */
     public Usuario login(String username, String password) throws SQLException {
+        System.out.println("[AUTH] Intento de login username='" + username + "'");
         Usuario usuario = usuarioDAO.buscarPorUsername(username);
-        if (usuario == null) return null;
+        if (usuario == null) {
+            System.out.println("[AUTH] Usuario no encontrado o inactivo para username='" + username + "'");
+            return null;
+        }
 
         String hashIngresado = hashSHA256(password);
+        String hashEnDb = usuario.getPasswordHash();
+        System.out.println("[AUTH] Usuario encontrado id=" + usuario.getId() + " rol=" + usuario.getRol());
+        System.out.println("[AUTH] hashIngresado=" + resumirHash(hashIngresado) + " hashDB=" + resumirHash(hashEnDb));
         if (hashIngresado.equals(usuario.getPasswordHash())) {
+            System.out.println("[AUTH] OK credenciales válidas username='" + username + "'");
             return usuario;
         }
+        System.out.println("[AUTH] FAIL hash no coincide username='" + username + "'");
         return null;
     }
 
@@ -41,5 +50,13 @@ public class AuthService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 no disponible en esta JVM", e);
         }
+    }
+
+    private static String resumirHash(String hash) {
+        if (hash == null) return "null";
+        int len = hash.length();
+        String inicio = hash.substring(0, Math.min(8, len));
+        String fin = hash.substring(Math.max(0, len - 4));
+        return inicio + "..." + fin + " (len=" + len + ")";
     }
 }

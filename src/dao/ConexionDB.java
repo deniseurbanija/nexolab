@@ -13,7 +13,8 @@ public class ConexionDB {
 
     private static final String URL      = "jdbc:mysql://localhost:3306/nexolab?useSSL=false&serverTimezone=America/Argentina/Buenos_Aires";
     private static final String USUARIO  = "root";
-    private static final String PASSWORD = "";  // Ajustar según configuración local
+    // $env:DB_PASSWORD="tu_clave"
+    private static final String PASSWORD = System.getenv("DB_PASSWORD");
 
     private static Connection instancia;
 

@@ -44,9 +44,9 @@ public class PacienteService {
     public Paciente registrarPaciente(String nombre, String especie, String raza,
                                       java.time.LocalDate fechaNac, int idDueno,
                                       int idClinica) throws SQLException {
-        if (nombre == null || nombre.isBlank())
+        if (nombre == null || nombre.isEmpty())
             throw new IllegalArgumentException("El nombre del paciente no puede estar vacío.");
-        if (especie == null || especie.isBlank())
+        if (especie == null || especie.isEmpty())
             throw new IllegalArgumentException("Debe indicarse la especie.");
 
         Paciente p = new Paciente();
