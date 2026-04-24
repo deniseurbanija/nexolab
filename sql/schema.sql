@@ -150,16 +150,16 @@ INSERT INTO clinicas (nombre, direccion, telefono, email) VALUES
 INSERT INTO laboratorios (nombre, direccion, telefono, email) VALUES
 ('BioVet Laboratorio Clínico', 'Av. Santa Fe 789, CABA', '011-4500-2222', 'biovet@lab.com');
 
--- Usuarios (password: 'admin123' -> SHA-256)
+-- Usuarios (contraseñas en texto plano solo para MVP; hash = SHA-256 UTF-8, hex minúsculas)
 -- SHA-256 de 'admin123'  = 240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9
--- SHA-256 de 'vet123'    = b777a42e70dcc5d3c742baeebe66d14b7c24e0f17e1f52b5ccdbd6c70cb3ce25
--- SHA-256 de 'lab123'    = 66de68a02aaf4d69c54cfdb43ea7ebe7b1e20becc23e01d8e56c2db741b8e3c4
+-- SHA-256 de 'vet123'    = 95668df3d5465c0efe2bddca0ae448bb213dfdcd7ed446039003e693c22284b1
+-- SHA-256 de 'lab123'    = 3705b578e8fcb1b82a94ad917881ec248bbd4111645e91aed3c19af12d82116f
 
 INSERT INTO usuarios (username, password_hash, nombre_completo, rol, id_clinica, id_laboratorio) VALUES
 ('admin',   '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Administrador NexoLab', 'ADMIN', NULL, NULL),
-('dra.garcia', 'b777a42e70dcc5d3c742baeebe66d14b7c24e0f17e1f52b5ccdbd6c70cb3ce25', 'Dra. Laura García', 'VETERINARIO', 1, NULL),
-('dr.perez',   'b777a42e70dcc5d3c742baeebe66d14b7c24e0f17e1f52b5ccdbd6c70cb3ce25', 'Dr. Marcos Pérez',  'VETERINARIO', 2, NULL),
-('tec.biovet', '66de68a02aaf4d69c54cfdb43ea7ebe7b1e20becc23e01d8e56c2db741b8e3c4', 'Lic. Ana Torres',   'LABORATORIO', NULL, 1);
+('dra.garcia', '95668df3d5465c0efe2bddca0ae448bb213dfdcd7ed446039003e693c22284b1', 'Dra. Laura García', 'VETERINARIO', 1, NULL),
+('dr.perez',   '95668df3d5465c0efe2bddca0ae448bb213dfdcd7ed446039003e693c22284b1', 'Dr. Marcos Pérez',  'VETERINARIO', 2, NULL),
+('tec.biovet', '3705b578e8fcb1b82a94ad917881ec248bbd4111645e91aed3c19af12d82116f', 'Lic. Ana Torres',   'LABORATORIO', NULL, 1);
 
 -- Dueños y pacientes de ejemplo
 INSERT INTO duenos (nombre, apellido, telefono, email, id_clinica) VALUES
