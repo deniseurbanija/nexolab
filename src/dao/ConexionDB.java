@@ -11,11 +11,18 @@ import java.sql.SQLException;
  */
 public class ConexionDB {
 
-    private static final String URL      = "jdbc:mysql://localhost:3306/nexolab?useSSL=false&serverTimezone=America/Argentina/Buenos_Aires";
+    // Forzamos UTF-8 end-to-end para evitar "??" en acentos/ñ.
+    private static final String URL      =
+            "jdbc:mysql://localhost:3306/nexolab" +
+            "?useSSL=false" +
+            "&serverTimezone=America/Argentina/Buenos_Aires" +
+            "&useUnicode=true" +
+            "&characterEncoding=UTF-8" +
+            "&characterSetResults=UTF-8";
     private static final String USUARIO  = "root";
-    // $env:DB_PASSWORD="tu_clave"
-    private static final String PASSWORD = System.getenv("DB_PASSWORD");
+    // PowerShell: $env:DB_PASSWORD="tu_clave"  (antes de ejecutar la app)
 
+    
     private static Connection instancia;
 
     private ConexionDB() {}
@@ -27,10 +34,28 @@ public class ConexionDB {
             } catch (ClassNotFoundException e) {
                 throw new SQLException("Driver MySQL no encontrado. Verificar mysql-connector-java en el classpath.", e);
             }
-            instancia = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+
+            String password = obtenerPasswordDb();
+            if (password == null || password.isBlank()) {
+                throw new SQLException(
+                        "DB_PASSWORD no está configurada. Definila antes de ejecutar (PowerShell: $env:DB_PASSWORD=\"...\"), " +
+                        "o pasá -Ddb.password=\"...\" al iniciar la JVM."
+                );
+            }
+
+            instancia = DriverManager.getConnection(URL, USUARIO, password);
             System.out.println("[DB] Conexión establecida con NexoLab.");
         }
         return instancia;
+    }
+
+    private static String obtenerPasswordDb() {
+        String env = System.getenv("DB_PASSWORD");
+        if (env != null && !env.isBlank()) return env;
+        // Alternativa para ejecución desde IDE/atajos: -Ddb.password=...
+        String prop = System.getProperty("db.password");
+        if (prop != null && !prop.isBlank()) return prop;
+        return env; // puede ser null/blank
     }
 
     public static void cerrarConexion() {

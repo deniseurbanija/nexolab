@@ -39,10 +39,10 @@ public class LoginWindow extends JFrame {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         JLabel title = new JLabel("NEXOLAB");
-        title.setFont(new Font("Inter", Font.BOLD, 22));
+        title.setFont(new Font("Arial", Font.BOLD, 22));
         title.setForeground(new Color(96, 165, 250));
         JLabel subtitle = new JLabel("Acceso al sistema");
-        subtitle.setFont(new Font("Inter", Font.PLAIN, 13));
+        subtitle.setFont(new Font("Arial", Font.PLAIN, 13));
         subtitle.setForeground(new Color(150, 150, 180));
         header.add(title, BorderLayout.NORTH);
         header.add(subtitle, BorderLayout.SOUTH);
@@ -57,17 +57,17 @@ public class LoginWindow extends JFrame {
 
         JLabel lblUser = new JLabel("Usuario");
         lblUser.setForeground(new Color(200, 200, 220));
-        lblUser.setFont(new Font("Inter", Font.PLAIN, 12));
+        lblUser.setFont(new Font("Arial", Font.PLAIN, 12));
 
         JLabel lblPass = new JLabel("Contraseña");
         lblPass.setForeground(new Color(200, 200, 220));
-        lblPass.setFont(new Font("Inter", Font.PLAIN, 12));
+        lblPass.setFont(new Font("Arial", Font.PLAIN, 12));
 
         styleField(txtUsername);
         styleField(txtPassword);
 
         lblError.setForeground(new Color(248, 113, 113));
-        lblError.setFont(new Font("Inter", Font.PLAIN, 12));
+        lblError.setFont(new Font("Arial", Font.PLAIN, 12));
 
         styleButton(btnLogin);
         btnLogin.addActionListener(e -> doLogin());
@@ -140,7 +140,15 @@ public class LoginWindow extends JFrame {
                     }
                     abrirPanelPorRol(usuario);
                 } catch (Exception ex) {
-                    setError("Error al iniciar sesión. Revisá la conexión a DB.");
+                    // Mostramos el motivo real (sin stacktrace en UI) y lo registramos en consola para debug.
+                    Throwable root = ex;
+                    while (root.getCause() != null) root = root.getCause();
+                    String msg = (root.getMessage() == null || root.getMessage().isBlank())
+                            ? root.getClass().getSimpleName()
+                            : root.getMessage();
+                    System.err.println("[AUTH] Error en login: " + msg);
+                    ex.printStackTrace();
+                    setError("Error al iniciar sesión: " + msg);
                 }
             }
         };
@@ -185,13 +193,13 @@ public class LoginWindow extends JFrame {
                 BorderFactory.createLineBorder(new Color(55, 55, 75), 1),
                 new EmptyBorder(10, 12, 10, 12)
         ));
-        field.setFont(new Font("Inter", Font.PLAIN, 13));
+        field.setFont(new Font("Arial", Font.PLAIN, 13));
     }
 
     private void styleButton(JButton b) {
         b.setBackground(new Color(59, 130, 246));
         b.setForeground(Color.WHITE);
-        b.setFont(new Font("Inter", Font.BOLD, 13));
+        b.setFont(new Font("Arial", Font.BOLD, 13));
         b.setBorderPainted(false);
         b.setFocusPainted(false);
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

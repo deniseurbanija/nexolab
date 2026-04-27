@@ -6,6 +6,10 @@
 CREATE DATABASE IF NOT EXISTS nexolab CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE nexolab;
 
+-- Asegura que el cliente/servidor interpreten literales en UTF-8 (evita "Garc?a", "P?rez", etc.)
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 -- ------------------------------------------------------------
 -- Tabla: clinicas
 -- ------------------------------------------------------------
