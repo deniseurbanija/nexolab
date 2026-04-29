@@ -1,6 +1,7 @@
 import view.LoginWindow;
 
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLightLaf;
 
 /**
  * Punto de entrada de la aplicación NexoLab.
@@ -15,6 +16,7 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         // invokeLater garantiza que la UI se cree en el hilo correcto de Swing (EDT)
         SwingUtilities.invokeLater(LoginWindow::new);
     }

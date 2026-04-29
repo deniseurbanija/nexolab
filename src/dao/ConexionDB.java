@@ -15,6 +15,8 @@ public class ConexionDB {
     private static final String URL      =
             "jdbc:mysql://localhost:3306/nexolab" +
             "?useSSL=false" +
+            // MySQL 8 / caching_sha2_password: permite al driver obtener la clave pública del servidor durante el login.
+            "&allowPublicKeyRetrieval=true" +
             "&serverTimezone=America/Argentina/Buenos_Aires" +
             "&useUnicode=true" +
             "&characterEncoding=UTF-8" +
