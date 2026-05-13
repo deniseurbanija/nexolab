@@ -118,8 +118,28 @@ public class OrdenService {
      *  5. No se permiten otros retrocesos ni saltos (ej: PENDIENTE → FINALIZADA está prohibido).
      */
     private boolean validarTransicion(OrdenAnalisis orden, EstadoOrden nuevoEstado) {
-        // Tu código va aquí
-        return false;
+        EstadoOrden actual = orden.getEstado();
+
+        if (actual == EstadoOrden.FINALIZADA || actual == EstadoOrden.CANCELADA) return false;
+
+        if (nuevoEstado == EstadoOrden.CANCELADA) return true;
+
+        switch (actual) {
+            case PENDIENTE:
+                return nuevoEstado == EstadoOrden.RECIBIDA;
+            case RECIBIDA:
+                return nuevoEstado == EstadoOrden.EN_PROCESO || nuevoEstado == EstadoOrden.FINALIZADA;
+            case EN_PROCESO:
+                if (nuevoEstado == EstadoOrden.FINALIZADA) return true;
+                if (nuevoEstado == EstadoOrden.RECIBIDA) {
+                    java.time.LocalDateTime ultimoCambio = orden.getFechaUltimoCambio();
+                    return ultimoCambio != null &&
+                            java.time.Duration.between(ultimoCambio, java.time.LocalDateTime.now()).toMinutes() < 10;
+                }
+                return false;
+            default:
+                return false;
+        }
     }
 
     // ----------------------------------------------------------------
